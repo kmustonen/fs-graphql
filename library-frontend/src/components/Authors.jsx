@@ -11,10 +11,14 @@ const Authors = (props) => {
     refetchQueries: [{ query: ALL_AUTHORS }],
   })
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault()
     if (name === '' || born === '') return
-    editAuthor({ variables: { name, setBornTo: Number(born)} })
+    try {
+      await editAuthor({ variables: { name, setBornTo: Number(born) } })
+    } catch (error) {
+      props.setError(error.message)
+    }
     setBorn('')
     setName('')
   }
@@ -55,7 +59,7 @@ const Authors = (props) => {
         <div>
           <label>
             author
-            <select value={name} onChange={({ target }) => setName(target.value)}>
+            <select name="name" value={name} onChange={({ target }) => setName(target.value)}>
               <option value="" disabled />
               {authors.map((a) => 
                 <option key={a.name} value={a.name}>{a.name}</option>

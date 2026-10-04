@@ -4,6 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Recommend from './components/Recommend'
 import LoginForm from './components/LoginForm'
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommend')}>recommend</button>
             <button onClick={onLogout}>logout</button>
           </>
         ) : (
@@ -46,9 +48,10 @@ const App = () => {
         )}
       </div>
       {errorMessage && <div>{errorMessage}</div>}
-      <Authors show={page === 'authors'} token={token} />
+      <Authors show={page === 'authors'} token={token} setError={notify} />
       <Books show={page === 'books'} />
-      {token && <NewBook show={page === 'add'} />}
+      {token && <Recommend show={page === 'recommend'} />}
+      {token && <NewBook show={page === 'add'} setError={notify} />}
       {!token && page === 'login' && (
         <LoginForm setToken={onLogin} setError={notify} />
       )}
